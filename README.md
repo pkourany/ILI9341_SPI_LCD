@@ -14,8 +14,11 @@ Usage
 Hardware SPI is used:
 
  A2 : SS(Slave Select)
+ 
  A3 : SCK(Serial Clock)
+ 
  A4 : MISO(Master In Slave Out)
+ 
  A5 : MOSI(Master Out Slave In)
 
 Constructor:
