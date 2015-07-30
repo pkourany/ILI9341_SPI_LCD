@@ -18,6 +18,10 @@ MIT license, all text above must be included in any redistribution
 #include <limits.h>
 
 #include "application.h"
+// Platform_ID 6 is photon
+#if  (PLATFORM_ID) == 6
+   static STM32_Pin_Info* PIN_MAP = HAL_Pin_Map(); // Pointer required for highest access speed
+#endif
 
 // Constructor when using hardware SPI.  Faster, but must use specific SPI pins (http://docs.spark.io/#/hardware):
 // A2 : SS(Slave Select)
