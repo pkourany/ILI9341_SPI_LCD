@@ -3,6 +3,9 @@ ILI9341 SPI LCD Library
 
 Library for ILI9341 low cost SPI LCD displays.
 
+Updated Jan 10, 2016 - Fixed fast GPIO for compatibility with new/old
+firmware
+
 Requirements
 ------------
 Adafruit_mfGFX library

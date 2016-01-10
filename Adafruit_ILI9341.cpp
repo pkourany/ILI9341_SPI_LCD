@@ -40,20 +40,20 @@ inline void Adafruit_ILI9341::spiwrite(uint8_t c) {
 
 inline void Adafruit_ILI9341::writecommand(uint8_t c) {
 
-	pinLO(_dc);		//digitalWrite(_dc, LOW);
+	pinResetFast(_dc);		//digitalWrite(_dc, LOW);
 	//digitalWrite(_sclk, LOW);
-	pinLO(_cs);		//digitalWrite(_cs, LOW);
+	pinResetFast(_cs);		//digitalWrite(_cs, LOW);
 	spiwrite(c);
-	pinHI(_cs);		//digitalWrite(_cs, HIGH);
+	pinSetFast(_cs);		//digitalWrite(_cs, HIGH);
 }
 
 inline void Adafruit_ILI9341::writedata(uint8_t c) {
 
-	pinHI(_dc);		//digitalWrite(_dc, HIGH);
+	pinSetFast(_dc);		//digitalWrite(_dc, HIGH);
 	//digitalWrite(_sclk, LOW);
-	pinLO(_cs);		//digitalWrite(_cs, LOW);
+	pinResetFast(_cs);		//digitalWrite(_cs, LOW);
 	spiwrite(c);
-	pinHI(_cs);		//digitalWrite(_cs, HIGH);
+	pinSetFast(_cs);		//digitalWrite(_cs, HIGH);
 }
 
 // Rather than a bazillion writecommand() and writedata() calls, screen
@@ -109,11 +109,11 @@ void Adafruit_ILI9341::begin(void) {
 	SPI.setDataMode(SPI_MODE0);
 
 	// toggle RST low to reset
-	pinHI(_rst);		//digitalWrite(_rst, HIGH);
+	pinSetFast(_rst);		//digitalWrite(_rst, HIGH);
 	delay(5);
-	pinLO(_rst);		//digitalWrite(_rst, LOW);
+	pinResetFast(_rst);		//digitalWrite(_rst, LOW);
 	delay(20);
-	pinHI(_rst);		//digitalWrite(_rst, HIGH);
+	pinSetFast(_rst);		//digitalWrite(_rst, HIGH);
 	delay(150);
 
 	writecommand(0xEF);
@@ -243,11 +243,11 @@ void Adafruit_ILI9341::setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1,	uint
 
 void Adafruit_ILI9341::pushColor(uint16_t color) {
 
-	pinHI(_dc);		//digitalWrite(_dc, HIGH);
-	pinLO(_cs);		//digitalWrite(_cs, LOW);
+	pinSetFast(_dc);		//digitalWrite(_dc, HIGH);
+	pinResetFast(_cs);		//digitalWrite(_cs, LOW);
 	spiwrite(color >> 8);
 	spiwrite(color);
-	pinHI(_cs);		//digitalWrite(_cs, HIGH);
+	pinSetFast(_cs);		//digitalWrite(_cs, HIGH);
 }
 
 void Adafruit_ILI9341::drawPixel(int16_t x, int16_t y, uint16_t color) {
@@ -258,11 +258,11 @@ void Adafruit_ILI9341::drawPixel(int16_t x, int16_t y, uint16_t color) {
 
 	setAddrWindow(x, y, x + 1, y + 1);
 
-	pinHI(_dc);		//digitalWrite(_dc, HIGH);
-	pinLO(_cs);		//digitalWrite(_cs, LOW);
+	pinSetFast(_dc);		//digitalWrite(_dc, HIGH);
+	pinResetFast(_cs);		//digitalWrite(_cs, LOW);
 	spiwrite(color >> 8);
 	spiwrite(color);
-	pinHI(_cs);		//digitalWrite(_cs, HIGH);
+	pinSetFast(_cs);		//digitalWrite(_cs, HIGH);
 }
 
 void Adafruit_ILI9341::drawFastVLine(int16_t x, int16_t y, int16_t h,
@@ -281,15 +281,15 @@ void Adafruit_ILI9341::drawFastVLine(int16_t x, int16_t y, int16_t h,
 
 	uint8_t hi = color >> 8, lo = color;
 
-	pinHI(_dc);		//digitalWrite(_dc, HIGH);
-	pinLO(_cs);		//digitalWrite(_cs, LOW);
+	pinSetFast(_dc);		//digitalWrite(_dc, HIGH);
+	pinResetFast(_cs);		//digitalWrite(_cs, LOW);
 
 	while (h--) {
 		spiwrite(hi);
 		spiwrite(lo);
 	}
 
-	pinHI(_cs);		//digitalWrite(_cs, HIGH);
+	pinSetFast(_cs);		//digitalWrite(_cs, HIGH);
 }
 
 void Adafruit_ILI9341::drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color) {
@@ -307,15 +307,15 @@ void Adafruit_ILI9341::drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t c
 
 	uint8_t hi = color >> 8, lo = color;
 
-	pinHI(_dc);		//digitalWrite(_dc, HIGH);
-	pinLO(_cs);		//digitalWrite(_cs, LOW);
+	pinSetFast(_dc);		//digitalWrite(_dc, HIGH);
+	pinResetFast(_cs);		//digitalWrite(_cs, LOW);
 
 	while (w--) {
 		spiwrite(hi);
 		spiwrite(lo);
 	}
 
-	pinHI(_cs);		//digitalWrite(_cs, HIGH);
+	pinSetFast(_cs);		//digitalWrite(_cs, HIGH);
 }
 
 void Adafruit_ILI9341::fillScreen(uint16_t color) {
@@ -343,8 +343,8 @@ void Adafruit_ILI9341::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
 
 	uint8_t hi = color >> 8, lo = color;
 
-	pinHI(_dc);		//digitalWrite(_dc, HIGH);
-	pinLO(_cs);		//digitalWrite(_cs, LOW);
+	pinSetFast(_dc);		//digitalWrite(_dc, HIGH);
+	pinResetFast(_cs);		//digitalWrite(_cs, LOW);
 
 	for (y = h; y > 0; y--) {
 		for (x = w; x > 0; x--) {
@@ -353,7 +353,7 @@ void Adafruit_ILI9341::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
 		}
 	}
 
-	pinHI(_cs);		//digitalWrite(_cs, HIGH);
+	pinSetFast(_cs);		//digitalWrite(_cs, HIGH);
 }
 
 // Pass 8-bit (each) R,G,B, get back 16-bit packed color
@@ -408,21 +408,21 @@ inline uint8_t Adafruit_ILI9341::spiread(void) {
 }
 
 inline uint8_t Adafruit_ILI9341::readdata(void) {
-	pinHI(_dc);		//digitalWrite(_dc, HIGH);
-	pinLO(_cs);		//digitalWrite(_cs, LOW);
+	pinSetFast(_dc);		//digitalWrite(_dc, HIGH);
+	pinResetFast(_cs);		//digitalWrite(_cs, LOW);
 	uint8_t r = spiread();
-	pinHI(_cs);		//digitalWrite(_cs, HIGH);
+	pinSetFast(_cs);		//digitalWrite(_cs, HIGH);
 
 	return r;
 }
 
 inline uint8_t Adafruit_ILI9341::readcommand8(uint8_t c) {
-	pinLO(_dc);		//digitalWrite(_dc, LOW);
+	pinResetFast(_dc);		//digitalWrite(_dc, LOW);
 	//digitalWrite(_sclk, LOW);
-	pinLO(_cs);		//digitalWrite(_cs, LOW);
+	pinResetFast(_cs);		//digitalWrite(_cs, LOW);
 	spiwrite(c);
-	pinHI(_dc);		//digitalWrite(_dc, HIGH);
+	pinSetFast(_dc);		//digitalWrite(_dc, HIGH);
 	uint8_t r = spiread();
-	pinHI(_cs);		//digitalWrite(_cs, HIGH);
+	pinSetFast(_cs);		//digitalWrite(_cs, HIGH);
 	return r;
 }
